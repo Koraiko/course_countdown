@@ -62,6 +62,4 @@ You can use this Project in your University Job or in a non-commercial way outsi
 **The License will be updated in the future in a standard-license-thing with a link**.
 
 ## Contact
-Koko - sarah.marek@uni-ulm.de
-
-Project Link: [https://github.com/Koraiko/course_countdown](https://github.com/Koraiko/course_countdown)
+Koko - sarah.marek@uni-ulm.de - [GitHub](https://github.com/Koraiko)
