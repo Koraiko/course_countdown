@@ -1,6 +1,10 @@
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+/**
+ * 
+ * @author Koraiko | Koko | University Ulm
+ *
+ */
 class MyListener implements KeyListener{
 
 	/**

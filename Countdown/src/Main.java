@@ -15,10 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 /**
- * @author Koraiko
- * A Program to visualize the Countdown until EidI
+ * @author Koraiko | Koko | University Ulm
+ * 
+ * A Program to visualize the Countdown until a course starts
  */
 class Main {
+
+//===================================================================
+//	Settings
+//===================================================================
+	
+	// How many pictures do you have in Source (Named 0.jpg till <pic_count-1>.jpg)
+	// Without the winter and the summer pictures!
+	int pic_count = 17;	
+	
 	//time
 	int hour = 14;
 	int min = 15;
@@ -27,12 +37,20 @@ class Main {
 	//size of the window
 	int width = 1280;
 	int height = 720;
+
+//===================================================================
+//		variables
+//===================================================================
 	
 	//Labels & CO
 	JFrame frame;
 	JLabel time;
 	DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm:ss"); 
 	boolean timeBiggerThanZero = true;
+
+//===================================================================
+//		Main
+//===================================================================
 	
 	/**
 	 * main method
@@ -41,9 +59,13 @@ class Main {
 	public static void main(String[] args) {
 		new Main().main();
 	}
-	
+
+//===================================================================
+//		Window
+//===================================================================
+
 	/**
-	 * makes the window
+	 * makes the window with all contents and starts the timer
 	 */
 	void main() {
 		frame = new JFrame("EidI Countdown");
@@ -52,22 +74,22 @@ class Main {
 		frame.setLocationRelativeTo(null);
 		frame.addKeyListener(new MyListener());
 		
-//		double scale = 1;
-//		BufferedImage myPicture;
 		try {
+			// make Label with the time
 			time = new JLabel("HH:mm:ss");
 			time.setSize(450, 100);
 			time.setFont(new Font("Miriam Mono CLM", Font.PLAIN, 90));
 			frame.getContentPane().add(time);
 			time.setLocation(width-(130+time.getWidth()), height-(135+time.getHeight()));
 			
+			// make white background of the time window
 			JPanel white = new JPanel();
-			white.setBackground(new Color(255, 255, 255, 150));		//weiß
-//			white.setBackground(new Color(72, 209, 204, 150));		//blau-weiß	
+			white.setBackground(new Color(255, 255, 255, 150));		//white
 			white.setSize(time.getWidth()+20, time.getHeight()+20);
 			frame.getContentPane().add(white);
 			white.setLocation(time.getLocation().x-10, time.getLocation().y-10);
 			
+			// generate Picture in the Background
 			Image pic = getPicture();
 			ImageIcon img = new ImageIcon(pic);
 			JLabel picLabel = new JLabel(img);
@@ -85,15 +107,24 @@ class Main {
 		
 		counter();
 	}
+	
+//===================================================================
+//			Picture calculation
+//===================================================================
 
+	/**
+	 * get a random picture from your Source
+	 * @return				random Picture as Image
+	 * @throws IOException	Picture does not exist
+	 */
 	private Image getPicture() throws IOException {
-		int i = (int) (Math.random()*18);
-		if(i==17) {
+		int i = (int) (Math.random()*pic_count);
+		if(i==pic_count+1) {
 			int month = LocalDateTime.now().getMonth().getValue();
-			String picPath = "/uUlmSued.jpg";
+			String picPath = "/summer.jpg";
 			
 			if (month > 10 || month<3) {
-				picPath = "/uUlmSuedWinter.jpg";
+				picPath = "/winter.jpg";
 			}
 			
 			BufferedImage myPicture = ImageIO.read(getClass().getResource(picPath));
@@ -103,6 +134,10 @@ class Main {
 		return myPicture.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 	}
 
+//===================================================================
+//				Time calculation
+//===================================================================
+	
 	/**
 	 * counts the time until its the wanted time and prints it on the JLabel 'time'
 	 */
@@ -127,7 +162,6 @@ class Main {
 	String getTime() {
 		LocalDateTime now = LocalDateTime.now();
 		
-
 		int timeDiffS = 1*(sec-now.getSecond());
 		if(timeDiffS>59) timeDiffS -=60;
 		if(timeDiffS<0) timeDiffS +=60;
