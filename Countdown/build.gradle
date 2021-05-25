@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main.java.srcDirs = ['src']
+    main.resources.srcDirs = ['Source']
+}
+
+dependencies {
+    implementation 'commons-cli:commons-cli:1.4'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+}
+
+application.mainClass.set('Main')
+
+shadowJar {
+    archiveClassifier.set('')
+}
