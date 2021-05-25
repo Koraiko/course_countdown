@@ -39,6 +39,16 @@ The "summer.jpg" and "winter.jpg" files are special ones that will be only print
 
 All pictures are chosen randomly with the season pictures counting as one picture in the algorithm.
 
+### Building the source code
+[Gradle](https://gradle.org/) is used as the build tool and helps you to get all neccessary dependencies.
+To run the code using the wrapper (no need to install Gradle locally), run ```gradlew run --args='-h 20 -m 50 -s 30'```
+where `20`, `50` and `30` are arbitary numbers representing the time at which the timer shall expire.
+
+Running ```gradlew shadowJar``` creates a "fat" jar for you in ```build\libs``` for you that includes all images and dependencies.
+This jar can easily be run in different environments or without Gradle.
+
+Notice that running Gradle with invalid arguments for the program gives you a meaningless stack trace instead of a beautiful help text.
+
 ## Roadmap
 
 See the [open issues](https://github.com/Koraiko/course_countdown/issues) for a list of proposed features (and known issues).
