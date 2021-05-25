@@ -52,10 +52,12 @@ class Main {
     boolean timeBiggerThanZero = true;
 
     public Main(int hour, int min, int sec) {
-        this.targetTime = LocalDateTime.now().plusHours(hour).plusMinutes(min).plusSeconds(sec);
+        this.hour = hour;
+        this.min = min;
+        this.sec = sec;
     }
 
-    //===================================================================
+//===================================================================
 //		Main
 //===================================================================
 
@@ -65,44 +67,13 @@ class Main {
      * @param args parameter from starting the program
      */
     public static void main(String[] args) {
-        CommandLineParser parser = new DefaultParser();
-        Options options = buildOptions(args);
+        CommandLine cmd = parseOptions(args);
 
-        try {
-            CommandLine cmd = parser.parse(options, args);
-            Duration d = parse_values(cmd);
-            new Main(d.getHours(), d.getMinutes(), d.getSeconds()).main();
-        } catch (ParseException e) {
-            System.out.println(e.getMessage());
-            HelpFormatter formatter = new HelpFormatter();
-            formatter.printHelp("java -jar NAME.jar", options);
-            System.exit(1);
-        }
-    }
+        int hours = Integer.parseInt(cmd.getOptionValue("hours"));
+        int minutes = Integer.parseInt(cmd.getOptionValue("minutes"));
+        int seconds = Integer.parseInt(cmd.getOptionValue("seconds"));
 
-    private static Duration parse_values(CommandLine cmd) throws MissingOptionException {
-        boolean hasOption = false;
-        int hours = 0;
-        int minutes = 0;
-        int seconds = 0;
-
-        if (cmd.hasOption("hours")) {
-            hours = Integer.parseInt(cmd.getOptionValue("hours"));
-            hasOption = true;
-        }
-        if (cmd.hasOption("minutes")) {
-            minutes = Integer.parseInt(cmd.getOptionValue("minutes"));
-            hasOption = true;
-        }
-        if (cmd.hasOption("seconds")) {
-            seconds = Integer.parseInt(cmd.getOptionValue("seconds"));
-            hasOption = true;
-        }
-
-        if (!hasOption) {
-            throw new MissingOptionException("At least one option for the time must be provided.");
-        }
-        return new Duration(hours, minutes, seconds);
+        new Main(hours, minutes, seconds).main();
     }
 
 //===================================================================
@@ -212,7 +183,7 @@ class Main {
      */
     String getTime() {
         LocalDateTime now = LocalDateTime.now();
-        
+
         int timeDiffS = sec - now.getSecond();
         if (timeDiffS > 59) timeDiffS -= 60;
         if (timeDiffS < 0) timeDiffS += 60;
@@ -234,13 +205,34 @@ class Main {
         return format.format(LocalDateTime.of(2020, 11, 9, timeDiffH, timeDiffM, timeDiffS));
     }
 
-    private static Options buildOptions(String[] args) {
+    private static CommandLine parseOptions(String[] args) {
+        Options options = buildOptions();
+
+        CommandLine cmd = null;
+        CommandLineParser parser = new DefaultParser();
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            showHelpAndExit(e, options);
+        }
+
+        return cmd;
+    }
+
+    private static Options buildOptions() {
         Options options = new Options();
 
-        options.addOption("h", "hours", true, "Hours for the countdown to expire");
-        options.addOption("m", "minutes", true, "Minutes for the countdown to expire");
-        options.addOption("s", "seconds", true, "Seconds for the countdown to expire");
+        options.addRequiredOption("h", "hours", true, "Hours for the countdown to expire");
+        options.addRequiredOption("m", "minutes", true, "Minutes for the countdown to expire");
+        options.addRequiredOption("s", "seconds", true, "Seconds for the countdown to expire");
 
         return options;
+    }
+
+    private static void showHelpAndExit(ParseException e, Options options) {
+        System.out.println(e.getMessage());
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("java -jar NAME.jar", options);
+        System.exit(1);
     }
 }
