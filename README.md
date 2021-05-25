@@ -8,6 +8,7 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#i-want-to-have-my-own-pictures-as-background">I want to have my own pictures as background</a></li>
+        <li><a href="#building-the-source-code">Building the source code</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
